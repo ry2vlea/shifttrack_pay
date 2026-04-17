@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f3f6fb">
+  <title>Shift Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-row">
+        <div>
+          <p class="eyebrow">Shift Tracker</p>
+          <h1 class="app-title">Pay Period Dashboard</h1>
+        </div>
+        <button class="primary-button compact-button" id="openShiftButton" type="button">
+          Add Shift
+        </button>
+      </div>
+
+      <section class="summary-grid" aria-label="Pay period summary">
+        <article class="summary-card">
+          <p class="summary-label">Pay Period</p>
+          <p class="summary-value" id="weekRange">--</p>
+        </article>
+        <article class="summary-card">
+          <p class="summary-label">Total Hours</p>
+          <p class="summary-value" id="weeklyHours">0.00</p>
+        </article>
+        <article class="summary-card highlight-card">
+          <p class="summary-label">Estimated Gross Pay</p>
+          <p class="summary-value" id="weeklyGrossPay">$0.00</p>
+        </article>
+      </section>
+
+      <nav class="week-nav" aria-label="Pay period navigation">
+        <button class="ghost-button" id="prevWeekButton" type="button">Previous</button>
+        <button class="ghost-button" id="currentWeekButton" type="button">Current Period</button>
+        <button class="ghost-button" id="nextWeekButton" type="button">Next</button>
+      </nav>
+    </header>
+
+    <main class="content">
+      <section class="panel" aria-labelledby="settingsHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Settings</p>
+            <h2 id="settingsHeading">Pay Rules</h2>
+          </div>
+        </div>
+
+        <form id="settingsForm" class="settings-grid">
+          <label class="field">
+            <span>Hourly rate</span>
+            <input id="hourlyRate" name="hourlyRate" type="number" min="0" step="0.01" inputmode="decimal" required>
+          </label>
+
+          <label class="field">
+            <span>Overtime multiplier</span>
+            <input id="overtimeMultiplier" name="overtimeMultiplier" type="number" min="0" step="0.01" inputmode="decimal" required>
+          </label>
+
+          <label class="field">
+            <span>Meal penalty multiplier</span>
+            <input id="mealPenaltyMultiplier" name="mealPenaltyMultiplier" type="number" min="0" step="0.01" inputmode="decimal" required>
+          </label>
+
+          <label class="field">
+            <span>Daily OT threshold</span>
+            <input id="overtimeThresholdPerDay" name="overtimeThresholdPerDay" type="number" min="0" step="0.25" inputmode="decimal" required>
+          </label>
+
+          <button class="primary-button" type="submit">Save Settings</button>
+        </form>
+      </section>
+
+      <section class="panel shifts-panel" aria-labelledby="shiftsHeading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Shifts</p>
+            <h2 id="shiftsHeading">This Pay Period</h2>
+          </div>
+          <p class="panel-meta" id="shiftCount">0 shifts</p>
+        </div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <h3>No shifts yet</h3>
+          <p>Add your first shift to start tracking hours and pay for the current period.</p>
+        </div>
+
+        <div class="shift-list" id="shiftList"></div>
+      </section>
+    </main>
+
+    <button class="fab" id="openShiftFab" type="button" aria-label="Add shift">
+      +
+    </button>
+  </div>
+
+  <div class="sheet-backdrop hidden" id="shiftSheetBackdrop">
+    <section class="sheet" aria-labelledby="shiftSheetTitle" aria-modal="true" role="dialog">
+      <div class="sheet-handle" aria-hidden="true"></div>
+
+      <div class="sheet-header">
+        <div>
+          <p class="eyebrow">Shift</p>
+          <h2 id="shiftSheetTitle">Add Shift</h2>
+        </div>
+        <button class="ghost-button compact-button" id="closeSheetButton" type="button">Close</button>
+      </div>
+
+      <form id="shiftForm" class="sheet-form" novalidate>
+        <input id="shiftId" name="shiftId" type="hidden">
+
+        <label class="field">
+          <span>Date</span>
+          <input id="date" name="date" type="date" required>
+        </label>
+
+        <div class="field-row">
+          <label class="field">
+            <span>Clock in</span>
+            <input id="clockIn" name="clockIn" type="time" required>
+          </label>
+
+          <label class="field">
+            <span>Clock out</span>
+            <input id="clockOut" name="clockOut" type="time" required>
+          </label>
+        </div>
+
+        <label class="switch-field">
+          <span>Took break?</span>
+          <input id="tookBreak" name="tookBreak" type="checkbox">
+        </label>
+
+        <div class="field-row hidden" id="breakFields">
+          <label class="field">
+            <span>Break in</span>
+            <input id="breakIn" name="breakIn" type="time">
+          </label>
+
+          <label class="field">
+            <span>Break out</span>
+            <input id="breakOut" name="breakOut" type="time">
+          </label>
+        </div>
+
+        <p class="form-error hidden" id="formError" role="alert"></p>
+
+        <div class="sheet-actions">
+          <button class="ghost-button" id="cancelShiftButton" type="button">Cancel</button>
+          <button class="primary-button" type="submit">Save Shift</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
