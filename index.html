@@ -62,192 +62,216 @@
     </header>
 
     <main class="content">
-      <section class="panel dashboard-panel" aria-labelledby="dashboardHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Paycheck Dashboard</p>
-            <h2 id="dashboardHeading">Current Period Snapshot</h2>
-          </div>
-          <p class="panel-meta" id="dashboardStatus">Live from saved shifts</p>
+      <div class="tabs-shell">
+        <input class="tab-toggle" id="tabOverview" name="mainTabs" type="radio" checked>
+        <input class="tab-toggle" id="tabForecast" name="mainTabs" type="radio">
+        <input class="tab-toggle" id="tabSettings" name="mainTabs" type="radio">
+        <input class="tab-toggle" id="tabShifts" name="mainTabs" type="radio">
+
+        <div class="tab-nav" role="tablist" aria-label="Main sections">
+          <label class="tab-button" for="tabOverview" role="tab" tabindex="0">Overview</label>
+          <label class="tab-button" for="tabForecast" role="tab" tabindex="0">Forecast</label>
+          <label class="tab-button" for="tabSettings" role="tab" tabindex="0">Settings</label>
+          <label class="tab-button" for="tabShifts" role="tab" tabindex="0">Shifts</label>
         </div>
 
-        <div class="metrics-grid" id="periodMetrics"></div>
+        <div class="tab-panels">
+          <div class="tab-panel tab-panel-overview">
+            <section class="panel dashboard-panel" aria-labelledby="dashboardHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Paycheck Dashboard</p>
+                  <h2 id="dashboardHeading">Current Period Snapshot</h2>
+                </div>
+                <p class="panel-meta" id="dashboardStatus">Live from saved shifts</p>
+              </div>
 
-        <div class="flow-card">
-          <div class="flow-step">
-            <span class="flow-label">Gross Pay</span>
-            <strong id="flowGross">$0.00</strong>
+              <div class="metrics-grid" id="periodMetrics"></div>
+
+              <div class="flow-card">
+                <div class="flow-step">
+                  <span class="flow-label">Gross Pay</span>
+                  <strong id="flowGross">$0.00</strong>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                  <span class="flow-label">Deductions</span>
+                  <strong id="flowDeductions">$0.00</strong>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                  <span class="flow-label">Net Pay</span>
+                  <strong id="flowNet">$0.00</strong>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step emphasis">
+                  <span class="flow-label">Petty Cash</span>
+                  <strong id="flowPettyCash">$0.00</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="grossHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Gross Pay Breakdown</p>
+                  <h2 id="grossHeading">Hours Into Earnings</h2>
+                </div>
+              </div>
+              <div class="breakdown-list" id="grossBreakdown"></div>
+            </section>
+
+            <section class="panel" aria-labelledby="deductionsHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Deductions</p>
+                  <h2 id="deductionsHeading">Estimated Payroll Withholding</h2>
+                </div>
+              </div>
+              <div class="breakdown-list" id="deductionsBreakdown"></div>
+            </section>
+
+            <section class="panel allocation-panel" aria-labelledby="allocationHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Pod System</p>
+                  <h2 id="allocationHeading">Paycheck Allocation</h2>
+                </div>
+                <p class="panel-meta">Net Pay → Fixed → Savings → Petty Cash</p>
+              </div>
+
+              <div class="allocation-summary" id="allocationSummary"></div>
+              <div class="warning-banner hidden" id="allocationWarning" role="alert"></div>
+            </section>
           </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step">
-            <span class="flow-label">Deductions</span>
-            <strong id="flowDeductions">$0.00</strong>
+
+          <div class="tab-panel tab-panel-forecast">
+            <section class="panel" aria-labelledby="predictionSettingsHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Prediction Settings</p>
+                  <h2 id="predictionSettingsHeading">Future Check Controls</h2>
+                </div>
+              </div>
+
+              <form id="predictionForm" class="settings-grid">
+                <label class="field">
+                  <span>Projected shifts / pay period</span>
+                  <input id="projectedShiftsPerPayPeriod" name="projectedShiftsPerPayPeriod" type="number" min="0" step="1" inputmode="numeric" required>
+                </label>
+
+                <label class="field">
+                  <span>Monthly rent</span>
+                  <input id="monthlyRent" name="monthlyRent" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Car contribution / paycheck</span>
+                  <input id="carContributionPerPaycheck" name="carContributionPerPaycheck" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Default savings / paycheck</span>
+                  <input id="defaultSavingsPerPaycheck" name="defaultSavingsPerPaycheck" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Target petty cash minimum</span>
+                  <input id="targetPettyCashMinimum" name="targetPettyCashMinimum" type="number" min="0" step="0.01" inputmode="decimal">
+                </label>
+
+                <label class="switch-field">
+                  <span>Auto savings enabled</span>
+                  <input id="savingsEnabled" name="savingsEnabled" type="checkbox">
+                </label>
+
+                <button class="primary-button" type="submit">Save Prediction Settings</button>
+              </form>
+            </section>
+
+            <section class="panel" aria-labelledby="predictionHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Prediction Engine</p>
+                  <h2 id="predictionHeading">4 Scenario Check Forecast</h2>
+                </div>
+                <p class="panel-meta" id="predictionMeta">Uses saved work patterns</p>
+              </div>
+
+              <div class="scenario-grid" id="predictionGrid"></div>
+            </section>
           </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step">
-            <span class="flow-label">Net Pay</span>
-            <strong id="flowNet">$0.00</strong>
+
+          <div class="tab-panel tab-panel-settings">
+            <section class="panel" aria-labelledby="settingsHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Payroll Settings</p>
+                  <h2 id="settingsHeading">Rates and Deductions</h2>
+                </div>
+              </div>
+
+              <form id="settingsForm" class="settings-grid">
+                <label class="field">
+                  <span>Hourly rate</span>
+                  <input id="hourlyRate" name="hourlyRate" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Overtime multiplier</span>
+                  <input id="overtimeMultiplier" name="overtimeMultiplier" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Meal penalty multiplier</span>
+                  <input id="mealPenaltyMultiplier" name="mealPenaltyMultiplier" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Daily OT threshold</span>
+                  <input id="overtimeThresholdPerDay" name="overtimeThresholdPerDay" type="number" min="0" step="0.25" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Social Security rate</span>
+                  <input id="socialSecurityRate" name="socialSecurityRate" type="number" min="0" step="0.0001" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Medicare rate</span>
+                  <input id="medicareRate" name="medicareRate" type="number" min="0" step="0.0001" inputmode="decimal" required>
+                </label>
+
+                <label class="field">
+                  <span>Medical plan / paycheck</span>
+                  <input id="medicalPlanPerPaycheck" name="medicalPlanPerPaycheck" type="number" min="0" step="0.01" inputmode="decimal" required>
+                </label>
+
+                <button class="primary-button" type="submit">Save Payroll Settings</button>
+              </form>
+            </section>
           </div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-step emphasis">
-            <span class="flow-label">Petty Cash</span>
-            <strong id="flowPettyCash">$0.00</strong>
+
+          <div class="tab-panel tab-panel-shifts">
+            <section class="panel shifts-panel" aria-labelledby="shiftsHeading">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Saved Shifts</p>
+                  <h2 id="shiftsHeading">Included in This Pay Period</h2>
+                </div>
+                <p class="panel-meta" id="shiftCount">0 shifts</p>
+              </div>
+
+              <div class="empty-state hidden" id="emptyState">
+                <h3>No shifts in this pay period</h3>
+                <p>Add or select a period with shifts to generate payroll estimates and predictions.</p>
+              </div>
+
+              <div class="shift-list" id="shiftList"></div>
+            </section>
           </div>
         </div>
-      </section>
-
-      <section class="panel" aria-labelledby="grossHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Gross Pay Breakdown</p>
-            <h2 id="grossHeading">Hours Into Earnings</h2>
-          </div>
-        </div>
-        <div class="breakdown-list" id="grossBreakdown"></div>
-      </section>
-
-      <section class="panel" aria-labelledby="deductionsHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Deductions</p>
-            <h2 id="deductionsHeading">Estimated Payroll Withholding</h2>
-          </div>
-        </div>
-        <div class="breakdown-list" id="deductionsBreakdown"></div>
-      </section>
-
-      <section class="panel allocation-panel" aria-labelledby="allocationHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Pod System</p>
-            <h2 id="allocationHeading">Paycheck Allocation</h2>
-          </div>
-          <p class="panel-meta">Net Pay → Fixed → Savings → Petty Cash</p>
-        </div>
-
-        <div class="allocation-summary" id="allocationSummary"></div>
-        <div class="warning-banner hidden" id="allocationWarning" role="alert"></div>
-      </section>
-
-      <section class="panel" aria-labelledby="predictionSettingsHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Prediction Settings</p>
-            <h2 id="predictionSettingsHeading">Future Check Controls</h2>
-          </div>
-        </div>
-
-        <form id="predictionForm" class="settings-grid">
-          <label class="field">
-            <span>Projected shifts / pay period</span>
-            <input id="projectedShiftsPerPayPeriod" name="projectedShiftsPerPayPeriod" type="number" min="0" step="1" inputmode="numeric" required>
-          </label>
-
-          <label class="field">
-            <span>Monthly rent</span>
-            <input id="monthlyRent" name="monthlyRent" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Car contribution / paycheck</span>
-            <input id="carContributionPerPaycheck" name="carContributionPerPaycheck" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Default savings / paycheck</span>
-            <input id="defaultSavingsPerPaycheck" name="defaultSavingsPerPaycheck" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Target petty cash minimum</span>
-            <input id="targetPettyCashMinimum" name="targetPettyCashMinimum" type="number" min="0" step="0.01" inputmode="decimal">
-          </label>
-
-          <label class="switch-field">
-            <span>Auto savings enabled</span>
-            <input id="savingsEnabled" name="savingsEnabled" type="checkbox">
-          </label>
-
-          <button class="primary-button" type="submit">Save Prediction Settings</button>
-        </form>
-      </section>
-
-      <section class="panel" aria-labelledby="predictionHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Prediction Engine</p>
-            <h2 id="predictionHeading">4 Scenario Check Forecast</h2>
-          </div>
-          <p class="panel-meta" id="predictionMeta">Uses saved work patterns</p>
-        </div>
-
-        <div class="scenario-grid" id="predictionGrid"></div>
-      </section>
-
-      <section class="panel" aria-labelledby="settingsHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Payroll Settings</p>
-            <h2 id="settingsHeading">Rates and Deductions</h2>
-          </div>
-        </div>
-
-        <form id="settingsForm" class="settings-grid">
-          <label class="field">
-            <span>Hourly rate</span>
-            <input id="hourlyRate" name="hourlyRate" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Overtime multiplier</span>
-            <input id="overtimeMultiplier" name="overtimeMultiplier" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Meal penalty multiplier</span>
-            <input id="mealPenaltyMultiplier" name="mealPenaltyMultiplier" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Daily OT threshold</span>
-            <input id="overtimeThresholdPerDay" name="overtimeThresholdPerDay" type="number" min="0" step="0.25" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Social Security rate</span>
-            <input id="socialSecurityRate" name="socialSecurityRate" type="number" min="0" step="0.0001" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Medicare rate</span>
-            <input id="medicareRate" name="medicareRate" type="number" min="0" step="0.0001" inputmode="decimal" required>
-          </label>
-
-          <label class="field">
-            <span>Medical plan / paycheck</span>
-            <input id="medicalPlanPerPaycheck" name="medicalPlanPerPaycheck" type="number" min="0" step="0.01" inputmode="decimal" required>
-          </label>
-
-          <button class="primary-button" type="submit">Save Payroll Settings</button>
-        </form>
-      </section>
-
-      <section class="panel shifts-panel" aria-labelledby="shiftsHeading">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Saved Shifts</p>
-            <h2 id="shiftsHeading">Included in This Pay Period</h2>
-          </div>
-          <p class="panel-meta" id="shiftCount">0 shifts</p>
-        </div>
-
-        <div class="empty-state hidden" id="emptyState">
-          <h3>No shifts in this pay period</h3>
-          <p>Add or select a period with shifts to generate payroll estimates and predictions.</p>
-        </div>
-
-        <div class="shift-list" id="shiftList"></div>
-      </section>
+      </div>
     </main>
 
     <button class="fab" id="openShiftFab" type="button" aria-label="Add shift">+</button>
